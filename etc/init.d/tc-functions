@@ -64,7 +64,11 @@ find_mountpoint() {
  MOUNTPOINT=""
  MOUNTED="no"
  D2="$1"
+ ISPRE="${2-no}"
  if [ "$D2" == "nfs" ]; then
+    if [ "$ISPRE" == "yes" ]; then
+      return
+    fi
     MOUNTPOINT=/mnt/nfs
     MOUNTED="yes"
     return
@@ -87,6 +91,10 @@ find_mountpoint() {
    fi
  else
    D2=/dev/$D2
+ fi
+ if [ "$ISPRE" == "yes" ]; then
+   MOUNTPOINT="$D2"
+   return
  fi
  MOUNTPOINT="$(grep -i ^$D2\  /etc/mtab|awk '{print $2}'|head -n 1)"
  if [ -n "$MOUNTPOINT" ]; then

@@ -304,10 +304,11 @@ if [ -n "$PRETCE" ]; then
 		SRC=$RAM
 		[ -f $SRC/copy2fs.flg ] && CPTOFS=1
 	else
-		PPATH=${PRETCE%%/*}
+		find_mountpoint ${PRETCE%%/*} yes
+		PPATH=${MOUNTPOINT##*/}
 		mkdir -p /mnt/$PPATH
 		mount /dev/$PPATH /mnt/$PPATH
-		SRC=/mnt/$PRETCE
+		SRC=/mnt/$PPATH/${PRETCE#*/}
 		[ -x $SRC/onpre.sh ] && cp $SRC/onpre.sh /tmp
 		[ -f $SRC/copy2fs.flg ] && CPTOFS=1
 		if [ $CPTOFS ] ; then
